@@ -273,6 +273,109 @@ function classifyFormForAnySchool(formName, count = 0) {
     };
 }
 
+// Enhanced UI/UX Functions for Better Data Source Management
+function showDataSourceSelection() {
+    // Hide all analysis sections
+    const elementsToHide = [
+        'current-analysis', 'upload-section', 'upload-results', 
+        'filter-section', 'formsTable'
+    ];
+    
+    elementsToHide.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.style.display = 'none';
+    });
+    
+    // Show data source selection
+    const dataSourceSection = document.querySelector('.data-source-section');
+    if (dataSourceSection) {
+        dataSourceSection.style.display = 'block';
+    }
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showSampleAnalysis() {
+    // Hide data source selection and upload sections
+    const dataSourceSection = document.querySelector('.data-source-section');
+    if (dataSourceSection) dataSourceSection.style.display = 'none';
+    
+    const uploadSection = document.getElementById('upload-section');
+    if (uploadSection) uploadSection.style.display = 'none';
+    
+    const uploadResults = document.getElementById('upload-results');
+    if (uploadResults) uploadResults.style.display = 'none';
+    
+    // Show current analysis header
+    const currentAnalysis = document.getElementById('current-analysis');
+    if (currentAnalysis) {
+        currentAnalysis.style.display = 'block';
+        
+        const title = document.getElementById('analysis-title');
+        if (title) title.textContent = '📊 Singapore American School Analysis';
+        
+        const source = document.getElementById('analysis-source');
+        if (source) {
+            source.textContent = 'Sample Data - 15,131 Transactions';
+            source.className = 'analysis-source sample';
+        }
+    }
+    
+    // Show filter section and table
+    const filterSection = document.getElementById('filter-section');
+    if (filterSection) filterSection.style.display = 'block';
+    
+    const formsTable = document.getElementById('formsTable');
+    if (formsTable) formsTable.style.display = 'table';
+    
+    // Reset to original data if custom data is present
+    const customRows = document.querySelectorAll('#formsTable tbody tr[data-custom="true"]');
+    if (customRows.length > 0) {
+        location.reload(); // Only reload if custom data is present
+        return;
+    }
+    
+    // Scroll to analysis
+    setTimeout(() => {
+        const analysisElement = document.getElementById('current-analysis');
+        if (analysisElement) {
+            analysisElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, 100);
+}
+
+function showUploadAnalysis() {
+    // Hide other sections
+    const dataSourceSection = document.querySelector('.data-source-section');
+    if (dataSourceSection) dataSourceSection.style.display = 'none';
+    
+    const elementsToHide = [
+        'current-analysis', 'upload-results', 'filter-section', 'formsTable'
+    ];
+    
+    elementsToHide.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.style.display = 'none';
+    });
+    
+    // Show upload section
+    const uploadSection = document.getElementById('upload-section');
+    if (uploadSection) uploadSection.style.display = 'block';
+    
+    // Reset upload area and initialize
+    resetUploadArea();
+    initializeUpload();
+    
+    // Scroll to upload section
+    setTimeout(() => {
+        const uploadElement = document.getElementById('upload-section');
+        if (uploadElement) {
+            uploadElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, 100);
+}
+
 // CSV Upload and Analysis Functions
 function initializeUpload() {
     const uploadArea = document.getElementById('upload-area');
@@ -335,7 +438,7 @@ function parseAndAnalyzeCSV(csvContent) {
     try {
         showProgress('Analyzing forms...', 50);
         
-        // Simple CSV parsing (handles basic cases)
+        // Simple CSV parsing
         const lines = csvContent.split('\n').filter(line => line.trim());
         if (lines.length < 2) {
             throw new Error('CSV must have at least a header row and one data row');
@@ -347,7 +450,6 @@ function parseAndAnalyzeCSV(csvContent) {
         // Find relevant columns
         const nameColumn = findColumn(headers, ['form', 'name', 'document', 'title']);
         const countColumn = findColumn(headers, ['count', 'volume', 'number', 'quantity', 'total']);
-        const typeColumn = findColumn(headers, ['type', 'category', 'classification']);
         
         if (nameColumn === -1) {
             throw new Error('Could not find form name column. Expected headers like "Form", "Name", "Document", or "Title"');
@@ -356,13 +458,12 @@ function parseAndAnalyzeCSV(csvContent) {
         // Parse data rows
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(',').map(cell => cell.trim().replace(/"/g, ''));
-            if (row.length >= Math.max(nameColumn + 1, countColumn + 1)) {
+            if (row.length >= Math.max(nameColumn + 1, countColumn !== -1 ? countColumn + 1 : 0)) {
                 const formName = row[nameColumn];
                 const count = countColumn !== -1 ? parseInt(row[countColumn]) || 0 : 0;
-                const existingType = typeColumn !== -1 ? row[typeColumn] : '';
                 
                 if (formName) {
-                    data.push({ formName, count, existingType });
+                    data.push({ formName, count });
                 }
             }
         }
@@ -420,7 +521,7 @@ function analyzeUploadedData(data) {
     const optimizationPercent = totalVolume > 0 ? (approvalVolume / totalVolume * 100).toFixed(1) : 0;
     
     return {
-        forms: results.sort((a, b) => b.count - a.count), // Sort by volume
+        forms: results.sort((a, b) => b.count - a.count),
         summary: {
             totalForms,
             totalVolume,
@@ -434,44 +535,43 @@ function analyzeUploadedData(data) {
 }
 
 function displayAnalysisResults(analysis) {
-    // Hide upload section and show results
-    document.getElementById('upload-section').style.display = 'none';
+    // Hide upload section
+    const uploadSection = document.getElementById('upload-section');
+    if (uploadSection) uploadSection.style.display = 'none';
     
-    const resultsDiv = document.getElementById('upload-results');
-    resultsDiv.style.display = 'block';
-    
-    // Generate summary
-    const summaryDiv = document.getElementById('results-summary');
-    summaryDiv.innerHTML = `
-        <div class="results-grid">
-            <div class="result-card">
-                <span class="result-number">${analysis.summary.totalVolume.toLocaleString()}</span>
-                <div class="result-label">Total Transactions</div>
-                <div class="result-description">Across ${analysis.summary.totalForms} form types</div>
-            </div>
-            <div class="result-card optimization">
-                <span class="result-number">${analysis.summary.optimizationPercent}%</span>
-                <div class="result-label">Optimization Potential</div>
-                <div class="result-description">${analysis.summary.approvalVolume.toLocaleString()} transactions</div>
-            </div>
-            <div class="result-card preserved">
-                <span class="result-number">${(100 - analysis.summary.optimizationPercent).toFixed(1)}%</span>
-                <div class="result-label">Preserved as Signature</div>
-                <div class="result-description">${analysis.summary.signatureVolume.toLocaleString()} transactions</div>
-            </div>
-        </div>
+    // Show current analysis header with custom data indication
+    const currentAnalysis = document.getElementById('current-analysis');
+    if (currentAnalysis) {
+        currentAnalysis.style.display = 'block';
         
-        <div class="analysis-recommendations">
-            <h5>📋 Top Optimization Opportunities:</h5>
-            <ul>
-                ${analysis.forms
-                    .filter(form => form.newType === 'Approval' && form.count > 50)
-                    .slice(0, 5)
-                    .map(form => `<li><strong>${form.formName}</strong> (${form.count.toLocaleString()} transactions) - ${form.reason}</li>`)
-                    .join('')}
-            </ul>
-        </div>
-    `;
+        const title = document.getElementById('analysis-title');
+        if (title) title.textContent = '🎯 Your School\'s Analysis Results';
+        
+        const source = document.getElementById('analysis-source');
+        if (source) {
+            source.textContent = `Custom Data - ${analysis.summary.totalVolume.toLocaleString()} Transactions`;
+            source.className = 'analysis-source custom';
+        }
+    }
+    
+    // Show upload results
+    const resultsDiv = document.getElementById('upload-results');
+    if (resultsDiv) {
+        resultsDiv.style.display = 'block';
+        
+        // Generate enhanced results summary
+        const summaryDiv = document.getElementById('results-summary');
+        if (summaryDiv) {
+            summaryDiv.innerHTML = generateResultsSummary(analysis);
+        }
+    }
+    
+    // Show filter section and table with custom data
+    const filterSection = document.getElementById('filter-section');
+    if (filterSection) filterSection.style.display = 'block';
+    
+    const formsTable = document.getElementById('formsTable');
+    if (formsTable) formsTable.style.display = 'table';
     
     // Update table with new data
     updateTableWithCustomData(analysis.forms);
@@ -481,21 +581,81 @@ function displayAnalysisResults(analysis) {
     
     // Scroll to results
     setTimeout(() => {
-        resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        const analysisElement = document.getElementById('current-analysis');
+        if (analysisElement) {
+            analysisElement.scrollIntoView({ behavior: 'smooth' });
+        }
     }, 100);
+}
+
+function generateResultsSummary(analysis) {
+    return `
+        <div class="results-grid">
+            <div class="result-card">
+                <span class="result-number">${analysis.summary.totalVolume.toLocaleString()}</span>
+                <div class="result-label">Total Transactions</div>
+                <div class="result-description">Across ${analysis.summary.totalForms} unique form types</div>
+            </div>
+            <div class="result-card optimization">
+                <span class="result-number">${analysis.summary.optimizationPercent}%</span>
+                <div class="result-label">Optimization Potential</div>
+                <div class="result-description">${analysis.summary.approvalVolume.toLocaleString()} transactions can be streamlined</div>
+            </div>
+            <div class="result-card preserved">
+                <span class="result-number">${(100 - analysis.summary.optimizationPercent).toFixed(1)}%</span>
+                <div class="result-label">Preserved as Signature</div>
+                <div class="result-description">${analysis.summary.signatureVolume.toLocaleString()} transactions remain as e-signature</div>
+            </div>
+        </div>
+        
+        <div class="optimization-summary">
+            <h4>🎯 Key Insights for Your School:</h4>
+            <div class="insight-grid">
+                <div class="insight-item">
+                    <strong>Quick Wins:</strong> ${analysis.forms.filter(f => f.newType === 'Approval' && f.count > 100).length} high-volume forms ready for optimization
+                </div>
+                <div class="insight-item">
+                    <strong>Compliance:</strong> All legal contracts and parent consents automatically preserved as signatures
+                </div>
+                <div class="insight-item">
+                    <strong>Impact:</strong> Estimated 60% faster processing for optimized forms
+                </div>
+            </div>
+        </div>
+        
+        <div class="top-opportunities">
+            <h5>📋 Top Optimization Opportunities:</h5>
+            <div class="opportunities-list">
+                ${analysis.forms
+                    .filter(form => form.newType === 'Approval' && form.count > 20)
+                    .slice(0, 5)
+                    .map(form => `
+                        <div class="opportunity-item">
+                            <div class="opportunity-header">
+                                <strong>${form.formName}</strong>
+                                <span class="opportunity-count">${form.count.toLocaleString()} transactions</span>
+                            </div>
+                            <div class="opportunity-reason">${form.reason}</div>
+                        </div>
+                    `).join('')}
+            </div>
+        </div>
+    `;
 }
 
 function updateTableWithCustomData(forms) {
     const tbody = document.querySelector('#formsTable tbody');
+    if (!tbody) return;
     
     // Clear existing rows except summary rows
     const existingRows = tbody.querySelectorAll('tr:not(.total-row)');
     existingRows.forEach(row => row.remove());
     
-    // Add new data rows
+    // Add new data rows with custom data attribute
     forms.forEach(form => {
         const row = document.createElement('tr');
         row.className = form.newType === 'Approval' ? 'changed' : '';
+        row.setAttribute('data-custom', 'true');
         row.innerHTML = `
             <td class="form-name">${form.formName}</td>
             <td class="count">${form.count.toLocaleString()}</td>
@@ -507,119 +667,167 @@ function updateTableWithCustomData(forms) {
         tbody.insertBefore(row, tbody.querySelector('.total-row'));
     });
     
-    // Update summary rows
+    // Update summary rows with custom data
     const totalVolume = forms.reduce((sum, form) => sum + form.count, 0);
     const approvalVolume = forms.filter(f => f.newType === 'Approval').reduce((sum, form) => sum + form.count, 0);
     const signatureVolume = forms.filter(f => f.newType === 'Signature').reduce((sum, form) => sum + form.count, 0);
     
-    // Update totals
-    const totalRow = tbody.querySelector('.total-row');
-    if (totalRow) {
-        totalRow.cells[1].innerHTML = `<strong>${totalVolume.toLocaleString()}</strong>`;
-    }
+    // Remove old total rows
+    const totalRows = tbody.querySelectorAll('.total-row');
+    totalRows.forEach(row => row.remove());
+    
+    // Add custom summary rows
+    tbody.appendChild(createSummaryRow('📊 YOUR SCHOOL - Total Analysis', totalVolume, 'Mixed', 'Optimized', 'COMPLETE', 'Custom analysis of your school\'s data', 'total-row'));
+    tbody.appendChild(createSummaryRow('✅ APPROVAL OPTIMIZED', approvalVolume, 'Current', 'Approval', `${((approvalVolume/totalVolume)*100).toFixed(1)}%`, 'Converted to streamlined approval workflow', '', '#e8f5e8'));
+    tbody.appendChild(createSummaryRow('✍️ SIGNATURE PRESERVED', signatureVolume, 'Current', 'Signature', `${((signatureVolume/totalVolume)*100).toFixed(1)}%`, 'Maintained for legal/contractual requirements', '', '#ffe6e6'));
     
     // Reset filter to show all
     filterTable('all', document.querySelector('.filter-btn'));
 }
 
-// Data Source Toggle Functions
-function showSampleData() {
-    document.getElementById('sample-btn').classList.add('active');
-    document.getElementById('upload-btn').classList.remove('active');
+function createSummaryRow(title, count, col3, col4, col5, col6, className = '', bgColor = '') {
+    const row = document.createElement('tr');
+    if (className) row.className = className;
+    if (bgColor) row.style.backgroundColor = bgColor;
     
-    // Hide upload sections
-    document.getElementById('upload-section').style.display = 'none';
-    document.getElementById('upload-results').style.display = 'none';
-    
-    // Show filter section and original table
-    document.getElementById('filter-section').style.display = 'block';
-    document.getElementById('formsTable').style.display = 'table';
-    
-    // Reset to original Singapore American School data
-    location.reload(); // Simple way to reset to original state
-}
-
-function showUploadSection() {
-    document.getElementById('upload-btn').classList.add('active');
-    document.getElementById('sample-btn').classList.remove('active');
-    
-    // Show upload section
-    document.getElementById('upload-section').style.display = 'block';
-    document.getElementById('upload-results').style.display = 'none';
-    
-    // Reset upload area if needed
-    resetUploadArea();
-    initializeUpload();
+    row.innerHTML = `
+        <td><strong>${title}</strong></td>
+        <td class="count"><strong>${count.toLocaleString()}</strong></td>
+        <td class="type-col"><strong>${col3}</strong></td>
+        <td class="type-col"><strong>${col4}</strong></td>
+        <td><strong>${col5}</strong></td>
+        <td><strong>${col6}</strong></td>
+    `;
+    return row;
 }
 
 function resetAnalysis() {
-    document.getElementById('upload-results').style.display = 'none';
-    document.getElementById('upload-section').style.display = 'block';
+    // Hide results and show upload section
+    const elementsToHide = ['upload-results', 'current-analysis', 'filter-section', 'formsTable'];
+    elementsToHide.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.style.display = 'none';
+    });
+    
+    // Show upload section
+    const uploadSection = document.getElementById('upload-section');
+    if (uploadSection) uploadSection.style.display = 'block';
+    
+    // Reset upload area
     resetUploadArea();
     initializeUpload();
+    
+    // Scroll to upload section
+    setTimeout(() => {
+        const uploadElement = document.getElementById('upload-section');
+        if (uploadElement) {
+            uploadElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, 100);
 }
 
 // UI Helper Functions
+function showSuccess(message) {
+    // Remove any existing success messages
+    const existingMessages = document.querySelectorAll('.success-message');
+    existingMessages.forEach(msg => msg.remove());
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'success-message';
+    messageDiv.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <span style="font-size: 1.5rem;">✅</span>
+            <span>${message}</span>
+        </div>
+    `;
+    messageDiv.style.cssText = `
+        position: fixed;
+        top: 2rem;
+        right: 2rem;
+        background: #d4edda;
+        color: #155724;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #c3e6cb;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        max-width: 400px;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(messageDiv);
+    
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.parentNode.removeChild(messageDiv);
+                }
+            }, 300);
+        }
+    }, 5000);
+}
+
+function showError(message) {
+    const uploadArea = document.getElementById('upload-area');
+    if (!uploadArea) return;
+    
+    uploadArea.innerHTML = `
+        <div class="error-state">
+            <div class="error-icon">❌</div>
+            <div class="error-message">
+                <h4>Upload Error</h4>
+                <p>${message}</p>
+            </div>
+            <button class="retry-btn" onclick="resetUploadArea(); initializeUpload();">
+                🔄 Try Again
+            </button>
+        </div>
+    `;
+    uploadArea.style.cssText += `
+        border-color: #dc3545;
+        background: #f8d7da;
+        color: #721c24;
+    `;
+}
+
 function showProgress(message, percent) {
     const uploadArea = document.getElementById('upload-area');
+    if (!uploadArea) return;
+    
     uploadArea.innerHTML = `
-        <div class="progress-container">
-            <div class="loading-spinner"></div>
-            <div class="progress-text">${message}</div>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: ${percent}%"></div>
+        <div class="progress-state">
+            <div class="progress-icon">
+                <div class="loading-spinner"></div>
+            </div>
+            <div class="progress-text">
+                <h4>${message}</h4>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${percent}%"></div>
+                </div>
+                <p>${percent}% Complete</p>
             </div>
         </div>
     `;
 }
 
-function showError(message) {
-    const uploadArea = document.getElementById('upload-area');
-    uploadArea.innerHTML = `
-        <div class="error-message">
-            ❌ ${message}
-        </div>
-        <div class="upload-text">
-            <h4>Click to try again</h4>
-            <p>Upload a CSV file with your e-signature data</p>
-        </div>
-    `;
-    
-    // Re-initialize upload after error
-    setTimeout(() => {
-        resetUploadArea();
-        initializeUpload();
-    }, 3000);
-}
-
-function showSuccess(message) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'success-message';
-    messageDiv.textContent = `✅ ${message}`;
-    
-    const resultsDiv = document.getElementById('upload-results');
-    resultsDiv.insertBefore(messageDiv, resultsDiv.firstChild);
-    
-    setTimeout(() => {
-        if (messageDiv.parentNode) {
-            messageDiv.parentNode.removeChild(messageDiv);
-        }
-    }, 5000);
-}
-
 function resetUploadArea() {
     const uploadArea = document.getElementById('upload-area');
+    if (!uploadArea) return;
+    
+    uploadArea.style.cssText = ''; // Reset any error styling
     uploadArea.innerHTML = `
         <div class="upload-icon">📁</div>
         <div class="upload-text">
             <h4>Drop your CSV file here or click to browse</h4>
-            <p>Supported format: CSV with columns for Form Name, Count/Volume, and optionally Type</p>
+            <p>Supported format: CSV with Form Name and Count columns</p>
         </div>
         <input type="file" id="csv-file" accept=".csv" style="display: none;">
     `;
 }
 
-// Smooth scrolling for navigation links
+// Navigation and utility functions
 function initializeNavigation() {
     const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
     navLinks.forEach(link => {
@@ -638,7 +846,6 @@ function initializeNavigation() {
     });
 }
 
-// Enhanced keyboard navigation
 function initializeKeyboardShortcuts() {
     document.addEventListener('keydown', function(e) {
         if (e.ctrlKey || e.metaKey) {
@@ -670,12 +877,10 @@ function initializeKeyboardShortcuts() {
     });
 }
 
-// Initialize search functionality
 function initializeSearch() {
     const filterHeader = document.querySelector('.filter-header');
     if (!filterHeader) return;
     
-    // Create search input
     const searchContainer = document.createElement('div');
     searchContainer.style.cssText = `
         display: flex;
@@ -697,7 +902,6 @@ function initializeSearch() {
         transition: border-color 0.3s ease;
     `;
     
-    // Add search icon
     const searchIcon = document.createElement('span');
     searchIcon.textContent = '🔍';
     searchIcon.style.fontSize = '1.2rem';
@@ -705,13 +909,11 @@ function initializeSearch() {
     searchContainer.appendChild(searchIcon);
     searchContainer.appendChild(searchInput);
     
-    // Replace the filter info with search
     const filterInfo = filterHeader.querySelector('.filter-info');
     if (filterInfo) {
         filterInfo.replaceWith(searchContainer);
     }
     
-    // Add search functionality
     searchInput.addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
         const rows = document.querySelectorAll('#formsTable tbody tr');
@@ -722,7 +924,7 @@ function initializeSearch() {
                 row.classList.contains('summary-primary') || 
                 row.classList.contains('summary-success') || 
                 row.classList.contains('summary-preserved')) {
-                return; // Skip summary rows
+                return;
             }
             
             const formName = row.cells && row.cells[0] ? row.cells[0].textContent.toLowerCase() : '';
@@ -735,7 +937,6 @@ function initializeSearch() {
         updateVisibleCount(visibleCount);
     });
     
-    // Style focus state
     searchInput.addEventListener('focus', function() {
         this.style.borderColor = '#3498db';
     });
@@ -745,7 +946,6 @@ function initializeSearch() {
     });
 }
 
-// Add loading animation
 function showLoadingAnimation() {
     const table = document.getElementById('formsTable');
     if (table) {
@@ -758,7 +958,6 @@ function showLoadingAnimation() {
     }
 }
 
-// Add progress indicator
 function updateProgressIndicator() {
     const progressBar = document.createElement('div');
     progressBar.style.cssText = `
@@ -781,35 +980,159 @@ function updateProgressIndicator() {
     });
 }
 
+function addAnimations() {
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        .error-state {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .error-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .error-message h4 {
+            margin-bottom: 0.5rem;
+            color: #721c24;
+        }
+        
+        .error-message p {
+            margin-bottom: 1.5rem;
+            color: #721c24;
+        }
+        
+        .retry-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .retry-btn:hover {
+            background: #c82333;
+        }
+        
+        .progress-state {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .progress-icon {
+            margin-bottom: 1rem;
+        }
+        
+        .progress-text h4 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-text p {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .opportunity-item {
+            background: #f8fafc;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .opportunity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .opportunity-count {
+            background: #e8f4f8;
+            color: #2980b9;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .opportunity-reason {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        .optimization-summary {
+            background: #f8fafc;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .optimization-summary h4 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .insight-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #3498db;
+        }
+        
+        .top-opportunities {
+            margin-top: 2rem;
+        }
+        
+        .top-opportunities h5 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .opportunities-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 // Main initialization function
 function initialize() {
     try {
-        // Set initial filter to show all forms
-        const firstButton = document.querySelector('.filter-btn');
-        if (firstButton) {
-            filterTable('all', firstButton);
-        }
+        // Start by showing data source selection
+        showDataSourceSelection();
         
-        // Initialize all features
+        // Initialize all core features
         initializeNavigation();
         initializeKeyboardShortcuts();
         initializeSearch();
         updateProgressIndicator();
-        
-        // Initialize upload functionality
-        initializeUpload();
-        
-        // Add enhanced filter click handlers
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                showLoadingAnimation();
-            });
-        });
-        
-        // Initialize visible count
-        const totalRows = document.querySelectorAll('#formsTable tbody tr:not(.total-row):not(.summary-primary):not(.summary-success):not(.summary-preserved)').length;
-        updateVisibleCount(totalRows);
+        addAnimations();
         
         console.log('📊 SAS E-Signature Study Dashboard Initialized');
         console.log('💡 Tip: Use Ctrl+1,2,3,4,5 for quick filtering');

@@ -34,48 +34,121 @@
             </div>
         </div>
 
-        <!-- CSV Upload Section -->
-        <div class="upload-section" id="upload-section">
-            <h3>🔄 Analyze Your School's Data</h3>
-            <p>Upload your e-signature CSV data to get a customized optimization analysis for your school.</p>
+        <!-- Data Source Selection -->
+        <div class="data-source-section">
+            <h2>📊 Choose Your Analysis</h2>
+            <p>Select how you'd like to explore e-signature optimization opportunities:</p>
+            
+            <div class="analysis-options">
+                <div class="option-card sample-option" id="sample-card">
+                    <div class="option-header">
+                        <h3>🏫 View Sample Analysis</h3>
+                        <span class="option-badge sample">Sample Data</span>
+                    </div>
+                    <div class="option-content">
+                        <p><strong>Singapore American School Case Study</strong></p>
+                        <p>Explore our comprehensive analysis of 15,131 real transactions showing 40.7% optimization potential.</p>
+                        <ul class="option-features">
+                            <li>✅ Real school data and results</li>
+                            <li>✅ Best practice examples</li>
+                            <li>✅ Implementation recommendations</li>
+                        </ul>
+                        <button class="option-btn sample-btn" onclick="showSampleAnalysis()">
+                            📋 Explore Sample Analysis
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="option-card upload-option" id="upload-card">
+                    <div class="option-header">
+                        <h3>🔄 Analyze Your Data</h3>
+                        <span class="option-badge upload">Your School</span>
+                    </div>
+                    <div class="option-content">
+                        <p><strong>Upload Your School's CSV Data</strong></p>
+                        <p>Get personalized optimization recommendations based on your actual e-signature usage patterns.</p>
+                        <ul class="option-features">
+                            <li>🎯 Customized recommendations</li>
+                            <li>📈 Your optimization percentage</li>
+                            <li>🔒 Secure client-side processing</li>
+                        </ul>
+                        <button class="option-btn upload-btn" onclick="showUploadAnalysis()">
+                            📁 Upload Your Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Analysis Display -->
+        <div class="current-analysis" id="current-analysis" style="display: none;">
+            <div class="analysis-header">
+                <div class="analysis-title">
+                    <h2 id="analysis-title">📊 Analysis Results</h2>
+                    <span class="analysis-source" id="analysis-source">Sample Data</span>
+                </div>
+                <button class="switch-btn" onclick="showDataSourceSelection()">
+                    🔄 Switch Analysis Type
+                </button>
+            </div>
+        </div>
+
+        <!-- CSV Upload Section (Hidden by default) -->
+        <div class="upload-section" id="upload-section" style="display: none;">
+            <div class="upload-header">
+                <h3>📁 Upload Your School's E-Signature Data</h3>
+                <p>Drag and drop your CSV file or click to browse. We'll analyze it and provide optimization recommendations.</p>
+            </div>
             
             <div class="upload-container">
                 <div class="upload-area" id="upload-area">
                     <div class="upload-icon">📁</div>
                     <div class="upload-text">
                         <h4>Drop your CSV file here or click to browse</h4>
-                        <p>Supported format: CSV with columns for Form Name, Count/Volume, and optionally Type</p>
+                        <p>Supported format: CSV with Form Name and Count columns</p>
                     </div>
                     <input type="file" id="csv-file" accept=".csv" style="display: none;">
                 </div>
                 
                 <div class="upload-info">
-                    <h5>Expected CSV Format:</h5>
+                    <h5>📋 Required CSV Format:</h5>
                     <div class="format-example">
                         <code>Form Name, Count, Type (optional)</code><br>
                         <code>Digital Citizenship Agreement, 1239</code><br>
                         <code>Faculty Contract, 213, Contract</code><br>
                         <code>Device Acceptance Form, 173</code>
                     </div>
+                    <div class="upload-tips">
+                        <p><strong>💡 Tips:</strong></p>
+                        <ul>
+                            <li>Export from DocuSign, Adobe Sign, or similar</li>
+                            <li>Include form names and transaction counts</li>
+                            <li>Data processed securely in your browser</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             
-            <div class="upload-results" id="upload-results" style="display: none;">
-                <h4>📊 Analysis Results for Your Data</h4>
-                <div class="results-summary" id="results-summary"></div>
-                <button class="btn-secondary" onclick="resetAnalysis()">🔄 Analyze Different File</button>
+            <div class="upload-actions">
+                <button class="btn-secondary" onclick="showDataSourceSelection()">
+                    ← Back to Analysis Options
+                </button>
             </div>
         </div>
 
-        <!-- Data Source Toggle -->
-        <div class="data-source-toggle">
-            <h3>📊 Data Analysis</h3>
-            <div class="toggle-buttons">
-                <button class="toggle-btn active" onclick="showSampleData()" id="sample-btn">
-                    📋 Singapore American School (Sample)
+        <!-- Upload Results Section -->
+        <div class="upload-results" id="upload-results" style="display: none;">
+            <div class="results-header">
+                <h3>🎯 Your School's Optimization Analysis</h3>
+                <span class="results-badge">Custom Analysis</span>
+            </div>
+            <div class="results-summary" id="results-summary"></div>
+            <div class="results-actions">
+                <button class="btn-primary" onclick="resetAnalysis()">
+                    🔄 Analyze Different File
                 </button>
-                <button class="toggle-btn" onclick="showUploadSection()" id="upload-btn">
-                    🔄 Upload Your School's Data
+                <button class="btn-secondary" onclick="showDataSourceSelection()">
+                    ← Back to Analysis Options
                 </button>
             </div>
         </div>
