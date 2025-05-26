@@ -34,7 +34,53 @@
             </div>
         </div>
 
-        <div class="filter-section">
+        <!-- CSV Upload Section -->
+        <div class="upload-section" id="upload-section">
+            <h3>🔄 Analyze Your School's Data</h3>
+            <p>Upload your e-signature CSV data to get a customized optimization analysis for your school.</p>
+            
+            <div class="upload-container">
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">
+                        <h4>Drop your CSV file here or click to browse</h4>
+                        <p>Supported format: CSV with columns for Form Name, Count/Volume, and optionally Type</p>
+                    </div>
+                    <input type="file" id="csv-file" accept=".csv" style="display: none;">
+                </div>
+                
+                <div class="upload-info">
+                    <h5>Expected CSV Format:</h5>
+                    <div class="format-example">
+                        <code>Form Name, Count, Type (optional)</code><br>
+                        <code>Digital Citizenship Agreement, 1239</code><br>
+                        <code>Faculty Contract, 213, Contract</code><br>
+                        <code>Device Acceptance Form, 173</code>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="upload-results" id="upload-results" style="display: none;">
+                <h4>📊 Analysis Results for Your Data</h4>
+                <div class="results-summary" id="results-summary"></div>
+                <button class="btn-secondary" onclick="resetAnalysis()">🔄 Analyze Different File</button>
+            </div>
+        </div>
+
+        <!-- Data Source Toggle -->
+        <div class="data-source-toggle">
+            <h3>📊 Data Analysis</h3>
+            <div class="toggle-buttons">
+                <button class="toggle-btn active" onclick="showSampleData()" id="sample-btn">
+                    📋 Singapore American School (Sample)
+                </button>
+                <button class="toggle-btn" onclick="showUploadSection()" id="upload-btn">
+                    🔄 Upload Your School's Data
+                </button>
+            </div>
+        </div>
+
+        <div class="filter-section" id="filter-section">
             <h4>📋 Filter Forms</h4>
             <div class="filter-buttons">
                 <button class="filter-btn active" onclick="filterTable('all', this)">📊 All Forms</button>
@@ -298,7 +344,7 @@
         <div style="margin-top: 2rem; text-align: center; padding: 2rem; background-color: #f8f9fa; border-radius: 8px;">
             <h4>📊 K-12 E-Signature Optimization Study</h4>
             <p>Singapore American School • Educational Technology Analysis</p>
-            <p style="font-size: 0.9rem; color: #666;">Study Period: Academic Year 2024-2025 • Analysis Date: May 2025</p>
+            <p style="font-size: 0.9rem; color: #666;">Study Period: Academic Year 2024-2025 • Analysis Date: January 2025</p>
             <a href="https://github.com/bryanfawcett/school-esignature-analysis" target="_blank" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">📋 View on GitHub</a>
         </div>
     </div>

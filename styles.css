@@ -765,22 +765,330 @@ section {
     }
 }
 
-@media (max-width: 480px) {
-    .hero-stats {
+/* Upload Section Styles */
+.upload-section {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    border-left: 4px solid #f39c12;
+}
+
+.upload-section h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.upload-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.upload-area {
+    border: 2px dashed #3498db;
+    border-radius: 8px;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+}
+
+.upload-area:hover {
+    border-color: #2980b9;
+    background: #e8f4f8;
+}
+
+.upload-area.dragover {
+    border-color: #27ae60;
+    background: #e8f5e8;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.upload-text h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.upload-text p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.upload-info {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.upload-info h5 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.format-example {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 1rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.upload-results {
+    background: #e8f5e8;
+    border: 1px solid #27ae60;
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 2rem 0;
+}
+
+.results-summary {
+    margin: 1.5rem 0;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+/* Data Source Toggle */
+.data-source-toggle {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.data-source-toggle h3 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.toggle-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.toggle-btn {
+    padding: 1rem 2rem;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    background: white;
+    color: #555;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.toggle-btn:hover {
+    border-color: #3498db;
+    color: #3498db;
+}
+
+.toggle-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+}
+
+/* Progress Bar */
+.progress-container {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.progress-bar {
+    background: #e9ecef;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100%;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+.progress-text {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+/* Analysis Results */
+.analysis-results {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.result-card {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid #3498db;
+}
+
+.result-card.optimization {
+    border-left-color: #27ae60;
+}
+
+.result-card.preserved {
+    border-left-color: #e74c3c;
+}
+
+.result-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.result-label {
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 0.25rem;
+}
+
+.result-description {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Custom Table for Uploaded Data */
+.custom-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin: 2rem 0;
+}
+
+.custom-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.recommendation-high {
+    background-color: #fff3cd;
+    border-left: 3px solid #f39c12;
+}
+
+.recommendation-medium {
+    background-color: #d1ecf1;
+    border-left: 3px solid #17a2b8;
+}
+
+.recommendation-low {
+    background-color: #f8d7da;
+    border-left: 3px solid #dc3545;
+}
+
+/* Error States */
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid #f5c6cb;
+    margin: 1rem 0;
+}
+
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid #c3e6cb;
+    margin: 1rem 0;
+}
+
+/* Loading States */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design for Upload Section */
+@media (max-width: 768px) {
+    .upload-container {
         grid-template-columns: 1fr;
     }
     
-    .impact-stats {
-        grid-template-columns: 1fr;
-    }
-    
-    .phase-header {
+    .toggle-buttons {
         flex-direction: column;
-        text-align: center;
+        align-items: center;
     }
     
-    .data-table th,
-    .data-table td {
-        padding: 0.25rem;
+    .toggle-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .results-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .upload-area {
+        padding: 2rem 1rem;
+    }
+    
+    .upload-icon {
+        font-size: 2rem;
+    }
+    
+    .results-grid {
+        grid-template-columns: 1fr;
     }
 }
