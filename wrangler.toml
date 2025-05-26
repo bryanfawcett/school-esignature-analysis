@@ -1,0 +1,55 @@
+name = "school-esignature-analysis"
+compatibility_date = "2024-01-15"
+
+[env.production]
+name = "school-esignature-analysis"
+
+[env.preview]
+name = "school-esignature-analysis-preview"
+
+# Build configuration for Cloudflare Pages
+[build]
+command = ""
+cwd = ""
+watch_dir = ""
+
+# Static site configuration
+[site]
+bucket = "./dist"
+
+# Environment variables (if needed)
+[vars]
+ENVIRONMENT = "production"
+
+# Custom headers for security and performance
+[[headers]]
+for = "/*"
+[headers.values]
+X-Frame-Options = "DENY"
+X-Content-Type-Options = "nosniff"
+X-XSS-Protection = "1; mode=block"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'"
+
+# Cache control for static assets
+[[headers]]
+for = "*.css"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "*.js"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML files should not be cached aggressively
+[[headers]]
+for = "*.html"
+[headers.values]
+Cache-Control = "public, max-age=300"
+
+# Redirects (if needed)
+[[redirects]]
+from = "/old-path"
+to = "/new-path"
+status = 301

@@ -1,8 +1,9 @@
 # K-12 E-Signature Forms Optimization Tool
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-brightgreen)](https://bryanfawcett.github.io/school-esignature-analysis/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Cloudflare%20Pages-orange)](https://school-esignature-analysis.pages.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CSV Upload](https://img.shields.io/badge/Feature-CSV%20Upload-blue.svg)](https://bryanfawcett.github.io/school-esignature-analysis/)
+[![CSV Upload](https://img.shields.io/badge/Feature-CSV%20Upload-blue.svg)](https://school-esignature-analysis.pages.dev/)
+[![Cloudflare Pages](https://img.shields.io/badge/Deployed%20on-Cloudflare%20Pages-F38020?logo=cloudflare)](https://school-esignature-analysis.pages.dev/)
 
 ## 🎯 Overview
 
@@ -15,10 +16,11 @@ This interactive tool helps K-12 schools optimize their e-signature workflows by
 - **📈 Optimization Metrics** - Calculate potential e-signature reduction percentage
 - **🔒 Compliance-First Approach** - Preserves signatures for legal requirements
 - **📱 Mobile Responsive** - Works on all devices for stakeholder review
+- **⚡ Cloudflare-Powered** - Lightning-fast global delivery and enhanced security
 
 ## 🚀 Live Demo Available
 
-**[View Interactive Analysis →](https://bryanfawcett.github.io/school-esignature-analysis/)**
+**[View Interactive Analysis →](https://school-esignature-analysis.pages.dev/)**
 
 Experience the full functionality including:
 - Sample data analysis from Singapore American School
@@ -57,7 +59,7 @@ Parent Permission Form, 89, Consent
 ```
 
 ### Step 2: Upload & Analyze
-1. Visit the [live tool](https://bryanfawcett.github.io/school-esignature-analysis/)
+1. Visit the [live tool](https://school-esignature-analysis.pages.dev/)
 2. Click "Upload Your School's Data"
 3. Drag & drop or select your CSV file
 4. Get instant analysis with optimization recommendations
@@ -104,14 +106,112 @@ The tool uses an intelligent algorithm to categorize forms based on educational 
 - **Enhanced compliance tracking** with audit trails
 - **Better resource allocation** for complex documents
 
+## ☁️ Cloudflare Pages Deployment
+
+This project is optimized for deployment on **Cloudflare Pages**, providing:
+
+- **⚡ Global CDN** - Lightning-fast delivery worldwide
+- **🔒 Enhanced Security** - Built-in DDoS protection and security headers
+- **🚀 Automatic Deployments** - Connected to GitHub for seamless updates
+- **📊 Analytics** - Built-in web analytics and performance monitoring
+- **🔧 Edge Functions** - Server-side functionality at the edge
+- **💰 Cost-Effective** - Generous free tier for educational projects
+
+### 🛠️ Deployment Setup
+
+#### Prerequisites
+- Node.js 16+ installed
+- Git repository
+- Cloudflare account
+
+#### Quick Deployment
+```bash
+# Clone the repository
+git clone https://github.com/bryanfawcett/school-esignature-analysis.git
+cd school-esignature-analysis
+
+# Install Wrangler CLI (Cloudflare's deployment tool)
+npm install -g wrangler
+
+# Login to Cloudflare
+wrangler auth login
+
+# Deploy to Cloudflare Pages
+npm run deploy
+
+# Or use the deployment script
+chmod +x deploy.sh
+./deploy.sh
+```
+
+#### Automated GitHub Deployment
+1. **Fork this repository** to your GitHub account
+2. **Connect to Cloudflare Pages:**
+   - Go to [Cloudflare Pages](https://pages.cloudflare.com/)
+   - Click "Create a project"
+   - Connect your GitHub account
+   - Select the forked repository
+3. **Configure build settings:**
+   - Build command: `echo "No build required"`
+   - Build output directory: `/`
+   - Root directory: `/`
+4. **Deploy:** Cloudflare will automatically deploy on every push to main
+
+#### Environment Configuration
+```bash
+# Create wrangler.toml for custom configuration
+name = "school-esignature-analysis"
+compatibility_date = "2024-01-15"
+
+[env.production]
+name = "school-esignature-analysis"
+
+# Custom domain (optional)
+[[route]]
+pattern = "your-domain.com/*"
+zone_name = "your-domain.com"
+```
+
+### 📊 Available Scripts
+
+```bash
+# Development server
+npm run dev                 # Start local development server
+
+# Deployment
+npm run deploy             # Deploy to production
+npm run deploy preview     # Deploy to preview environment
+
+# Local testing
+npm start                  # Start simple HTTP server
+python -m http.server 8000 # Alternative local server
+```
+
 ## 🛠️ Technical Implementation
 
 ### Built With
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Styling**: Responsive CSS Grid/Flexbox
 - **Data Processing**: Client-side CSV parsing
-- **Deployment**: GitHub Pages
-- **Analytics**: Interactive filtering and sorting
+- **Deployment**: Cloudflare Pages with Wrangler CLI
+- **Analytics**: Cloudflare Web Analytics (optional)
+- **Security**: Content Security Policy, security headers
+
+### Architecture
+```
+school-esignature-analysis/
+├── index.html              # Main application page
+├── styles.css              # Responsive styling
+├── script.js               # Interactive functionality
+├── wrangler.toml           # Cloudflare configuration
+├── package.json            # Project configuration
+├── deploy.sh               # Deployment script
+├── functions/              # Cloudflare Pages Functions
+│   └── _middleware.js      # Security headers and analytics
+├── sample-data/            # Example CSV files
+│   └── sample.csv
+└── README.md               # Documentation
+```
 
 ### Key Features
 - **Drag & Drop Upload**: Modern file handling with progress indicators
@@ -120,36 +220,14 @@ The tool uses an intelligent algorithm to categorize forms based on educational 
 - **Keyboard Shortcuts**: Power user features (Ctrl+1,2,3,4,5)
 - **Search Functionality**: Find specific forms quickly
 - **Export Ready**: Results suitable for presentation to stakeholders
+- **Edge Security**: Enhanced security headers via Cloudflare Functions
 
-## 📋 Installation & Local Development
-
-### Quick Start
-```bash
-# Clone the repository
-git clone https://github.com/bryanfawcett/school-esignature-analysis.git
-
-# Navigate to project directory
-cd school-esignature-analysis
-
-# Open in browser (no build process required)
-open index.html
-```
-
-### File Structure
-```
-school-esignature-analysis/
-├── index.html          # Main application page
-├── styles.css          # Responsive styling
-├── script.js           # Interactive functionality
-├── README.md           # Project documentation
-└── sample-data/        # Example CSV files
-```
-
-### Browser Compatibility
-- ✅ Chrome 80+
-- ✅ Firefox 75+
-- ✅ Safari 13+
-- ✅ Edge 80+
+## 🌐 Browser Compatibility
+- ✅ Chrome 80+ (Full support)
+- ✅ Firefox 75+ (Full support)
+- ✅ Safari 13+ (Full support)
+- ✅ Edge 80+ (Full support)
+- ✅ Mobile browsers (Responsive design)
 
 ## 🎓 Educational Use Cases
 
@@ -201,11 +279,39 @@ We welcome contributions from the educational technology community!
 - **Documentation**: Improve setup and usage guides
 
 ### Development Setup
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. **Fork the repository**
+2. **Clone your fork:**
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/school-esignature-analysis.git
+   cd school-esignature-analysis
+   ```
+3. **Install dependencies:**
+   ```bash
+   npm install -g wrangler
+   ```
+4. **Start development server:**
+   ```bash
+   npm run dev
+   ```
+5. **Make changes and test locally**
+6. **Deploy to preview environment:**
+   ```bash
+   ./deploy.sh preview
+   ```
+7. **Create pull request**
+
+### Deployment Workflow
+```mermaid
+graph LR
+    A[Local Development] --> B[Git Push]
+    B --> C[GitHub Repository]
+    C --> D[Cloudflare Pages]
+    D --> E[Automatic Deployment]
+    E --> F[Live Site]
+    
+    G[Manual Deploy] --> H[Wrangler CLI]
+    H --> D
+```
 
 ## 📞 Support & Contact
 
@@ -213,6 +319,7 @@ We welcome contributions from the educational technology community!
 - **📖 Documentation**: Check this README for setup and usage
 - **💬 Issues**: Open a GitHub issue for bugs or questions
 - **📧 Email**: Contact project maintainers for collaboration
+- **🌐 Live Site**: [school-esignature-analysis.pages.dev](https://school-esignature-analysis.pages.dev/)
 
 ### Project Maintainers
 - **Primary Developer**: [Bryan Fawcett](https://github.com/bryanfawcett)
@@ -231,8 +338,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-### Data Sources
+### Technology Partners
+- **Cloudflare Pages**: Hosting and global content delivery
+- **GitHub**: Version control and collaboration platform
 - **Singapore American School**: Real transaction data and use case validation
+
+### Data Sources
 - **Educational Technology Community**: Best practices and feedback
 - **Open Source Libraries**: Client-side CSV parsing and UI components
 
@@ -241,18 +352,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **IT Department**: Technical insights and implementation guidance
 - **Legal Affairs**: Compliance review and validation
 - **Faculty & Staff**: Operational requirements and user feedback
-
----
-
-## 🎯 Quick Links
-
-- **[📊 Live Analysis Tool](https://bryanfawcett.github.io/school-esignature-analysis/)** - Try the interactive dashboard
-- **[📁 GitHub Repository](https://github.com/bryanfawcett/school-esignature-analysis)** - Source code and issues
-- **[📝 Sample CSV](https://github.com/bryanfawcett/school-esignature-analysis/blob/main/sample-data/sample.csv)** - Example data format
-- **[📖 Documentation](https://github.com/bryanfawcett/school-esignature-analysis/wiki)** - Detailed setup guide
-
-**Ready to optimize your school's e-signature workflows? [Start analyzing your data now →](https://bryanfawcett.github.io/school-esignature-analysis/)**
-
----
-
-*Last Updated: January 2025 | Version 2.0 with CSV Upload Feature*

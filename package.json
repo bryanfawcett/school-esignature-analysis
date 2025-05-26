@@ -1,0 +1,49 @@
+{
+  "name": "school-esignature-analysis",
+  "version": "2.0.0",
+  "description": "Interactive tool to optimize K-12 school e-signature workflows through data-driven analysis",
+  "main": "index.html",
+  "scripts": {
+    "dev": "wrangler pages dev .",
+    "deploy": "wrangler pages deploy .",
+    "preview": "wrangler pages dev . --compatibility-date=2024-01-15",
+    "build": "echo 'No build step required for static site'",
+    "test": "echo 'No tests configured'",
+    "lint": "echo 'Linting not configured'",
+    "start": "python -m http.server 8000 || python3 -m http.server 8000 || npx serve .",
+    "clean": "rm -rf dist && mkdir dist && cp -r * dist/ 2>/dev/null || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bryanfawcett/school-esignature-analysis.git"
+  },
+  "keywords": [
+    "education",
+    "k12",
+    "esignature",
+    "workflow",
+    "optimization",
+    "analysis",
+    "docusign",
+    "adobe-sign",
+    "school-administration",
+    "digital-transformation"
+  ],
+  "author": "Bryan Fawcett <bryan@example.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bryanfawcett/school-esignature-analysis/issues"
+  },
+  "homepage": "https://school-esignature-analysis.pages.dev",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
