@@ -159,15 +159,16 @@ function classifyFormForAnySchool(formName, count = 0) {
         'contract', 'employment', 'faculty', 'teacher', 'coach', 'staff contract',
         'agreement', 'legal', 'consent form', 'permission form', 'waiver',
         'transcript', 'record release', 'participation agreement',
-        'board', 'petition', 'governance', 'vendor agreement',
+        'board', 'petition', 'governance', 'vendor agreement', 'tuition payment',
         'financial agreement', 'loan', 'mortgage', 'insurance'
     ];
     
     // Medium priority signatures (important consents)
     const consentKeywords = [
         'parent consent', 'field trip', 'medical', 'emergency contact',
-        'yearlong consent', 'trip permission', 'activity consent',
-        'photo release', 'media consent', 'student contract'
+        'permission - field', 'permission - athletic', 'activity consent',
+        'photo release', 'media consent', 'student contract', 'sports physical',
+        'medication administration', 'allergy action plan'
     ];
     
     // High priority approvals (policies, acknowledgments)
@@ -179,13 +180,14 @@ function classifyFormForAnySchool(formName, count = 0) {
     
     // Medium priority approvals (administrative processes)
     const adminKeywords = [
-        'device acceptance', 'devices acceptance', 'equipment', 'laptop',
-        'ipad', 'technology', 'computer', 'device responsibility',
+        'device acceptance', 'devices acceptance', 'device responsibility', 'equipment', 'laptop',
+        'ipad', 'technology', 'computer', 'information update', 'contact information',
         'reimbursement', 'expense', 'payroll', 'hr form', 'time sheet',
         'professional development', 'training', 'workshop',
         'substitute', 'sub form', 'replacement', 'interim',
-        'passport', 'information update', 'data update', 'profile update',
-        'emergency info', 'contact info', 'personal info'
+        'pickup authorization', 'transportation request', 'parking permit',
+        'volunteer background', 'graduation participation', 'yearbook photo',
+        'library material', 'building access', 'fundraising activity'
     ];
     
     // Application and enrollment forms (typically signatures)
@@ -313,11 +315,11 @@ function showSampleAnalysis() {
         currentAnalysis.style.display = 'block';
         
         const title = document.getElementById('analysis-title');
-        if (title) title.textContent = '📊 Singapore American School Analysis';
+        if (title) title.textContent = '📊 K-12 School Analysis';
         
         const source = document.getElementById('analysis-source');
         if (source) {
-            source.textContent = 'Sample Data - 15,131 Transactions';
+            source.textContent = 'Sample Data - 14,967 Transactions';
             source.className = 'analysis-source sample';
         }
     }
@@ -1134,7 +1136,7 @@ function initialize() {
         updateProgressIndicator();
         addAnimations();
         
-        console.log('📊 SAS E-Signature Study Dashboard Initialized');
+        console.log('📊 K-12 E-Signature Study Dashboard Initialized');
         console.log('💡 Tip: Use Ctrl+1,2,3,4,5 for quick filtering');
         console.log('🔄 Upload your school\'s CSV data for custom analysis');
         
